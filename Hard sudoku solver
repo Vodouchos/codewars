@@ -1,0 +1,126 @@
+import java.util.*;
+
+public class SudokuSolver {
+    private int[][] inputGrid;  
+  
+    public SudokuSolver(int[][] grid) {
+        inputGrid = grid;
+    }
+    
+    public int[][] solve() {
+        // TODO
+        return null;
+    }
+}
+
+class Sudoku {
+  private SudokuElement[][] grid = new SudokuElement[9][9];
+  private static int[][] sollution = null;
+  
+  Sudoku(Sudoku sudoku) {
+    // TODO clone
+  }
+  
+  Sudoku(int[][] inputGrid){
+    for(int i = 0; i<9; i++)
+      for(int j = 0; j<9; j++)
+        grid[i][j] = new SudokuElement(inputGrid[i][j]);
+  }
+  
+  public void removePossibleValue(ArrayList<SudokuElement> group, int value){
+    //TODO remove value from group elements
+  }
+  public void trimPossibilities(ArrayList<SudokuElement> group){
+    //TODO reduce possibilities for all found numbers from group 
+  }
+  public boolean isSolvable(){
+    // TODO
+    return false;
+  }
+  
+  public void solve(){
+    //TODO find sollution, on find add to static "sollution" else end
+  }
+  
+  public int[] getSollution(){
+    //TODO get sollution or throw E
+    return null;
+  }
+  
+  public ArrayList<SudokuElement> getRow(int index){
+    //TODO 
+    return null;
+  }
+  public ArrayList<SudokuElement> getColl(int index){
+    //TODO 
+    return null;
+  }
+  public ArrayList<SudokuElement> getSquare(int index){
+    //TODO 
+    return null;
+  }
+  
+}
+
+class SudokuElement {
+  private boolean[] possible = new boolean[9];
+  private int possibilities;
+  private int value; 
+  
+  SudokuElement(int inputValue){
+    value = inputValue;
+    if (value == 0) {
+      Arrays.fill(possible, true);
+      possibilities = 9;
+    } else {
+      Arrays.fill(possible, false);
+      possible[value - 1] = true;
+      possibilities = 0;
+    }    
+  }
+  
+  SudokuElement(SudokuElement element){
+    possible = Arrays.copyOf(element.possible, 9);
+    value = element.value;
+    possibilities = element.possibilities;
+  }
+  
+  
+  public int getValue(){
+    return value;
+  }
+  
+  public void setValue(int newValue){
+    value = newValue;
+    possibilities = 0;
+  }
+  
+  
+  public void setImpossible(int number){
+    if (possible[value - 1]) {
+      possible[value - 1] = false;
+      possibilities--;
+      }
+    return;
+  }
+  
+  public boolean checkImpossibibity(){
+    if (value > 0) return false;
+    if (possibilities == 0) return true;
+    return false;
+  }
+  
+  public boolean solve(){ //returns true on change
+    if (possibilities == 1){
+      for (int i = 0; i < 9; i++)
+        if (possible[i]) {
+          value = i + 1;
+          break;
+        }
+      possibilities = 0;
+      return true;
+    }
+    return false;
+  }
+  
+}
