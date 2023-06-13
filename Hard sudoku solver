@@ -18,7 +18,9 @@ class Sudoku {
   private static int[][] sollution = null;
   
   Sudoku(Sudoku sudoku) {
-    // TODO clone
+    for (int i = 0; i < 9; i++)
+      for (int j = 0; j < 9; j++)
+        grid[i][j] = new SudokuElement(sudoku.grid[i][j]);
   }
   
   Sudoku(int[][] inputGrid){
@@ -27,34 +29,49 @@ class Sudoku {
         grid[i][j] = new SudokuElement(inputGrid[i][j]);
   }
   
-  public void removePossibleValue(ArrayList<SudokuElement> group, int value){
-    //TODO remove value from group elements
+  public void removePossibleValueFromGroup(ArrayList<SudokuElement> group, int value){
+    for (SudokuElement element: group) element.setImpossible(value);
   }
+  
   public void trimPossibilities(ArrayList<SudokuElement> group){
-    //TODO reduce possibilities for all found numbers from group 
+    for (SudokuElement element: group)
+      if (element.getValue() != 0) removePossibleValueFromGroup(group, element.getValue());
   }
-  public boolean isSolvable(){
-    // TODO
+  
+  public boolean checkImpossibibity(){
+    for (SudokuElement[] row : grid)
+      for (SudokuElement element : row)
+        if (element.checkImpossibibity())
+          return true;
     return false;
+  }
+  
+  public boolean checkSolved(){
+    for (SudokuElement[] row : grid)
+      for (SudokuElement element : row)
+        if (element.getValue() == 0)
+          return false;
+    return true;
   }
   
   public void solve(){
     //TODO find sollution, on find add to static "sollution" else end
   }
   
-  public int[] getSollution(){
+  public int[][] getSollution(){
     //TODO get sollution or throw E
     return null;
   }
   
   public ArrayList<SudokuElement> getRow(int index){
-    //TODO 
-    return null;
+    return new ArrayList<SudokuElement>(Arrays.asList(grid[index]));
   }
+  
   public ArrayList<SudokuElement> getColl(int index){
     //TODO 
     return null;
   }
+  
   public ArrayList<SudokuElement> getSquare(int index){
     //TODO 
     return null;
@@ -85,12 +102,11 @@ class SudokuElement {
     possibilities = element.possibilities;
   }
   
-  
   public int getValue(){
     return value;
   }
   
-  public void setValue(int newValue){
+  public void setValue(int newValue){ 
     value = newValue;
     possibilities = 0;
   }
@@ -105,7 +121,7 @@ class SudokuElement {
   }
   
   public boolean checkImpossibibity(){
-    if (value > 0) return false;
+    if (value != 0) return false;
     if (possibilities == 0) return true;
     return false;
   }
